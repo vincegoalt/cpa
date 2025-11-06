@@ -86,9 +86,9 @@ export default function Navigation() {
               <Image
                 src="/images/klingeman-logo.png"
                 alt="Klingeman CPAs Logo"
-                width={180}
-                height={60}
-                className="h-12 w-auto"
+                width={240}
+                height={80}
+                className="h-16 w-auto brightness-0 invert"
                 priority
               />
             </button>
