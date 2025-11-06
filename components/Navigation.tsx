@@ -10,27 +10,47 @@ export default function Navigation() {
   const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
+    let rafId: number | null = null;
+    let isProcessing = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (isProcessing) return;
 
-      // Update active section based on scroll position
-      const sections = ['hero', 'about', 'clients', 'services'];
-      const scrollPosition = window.scrollY + 100;
+      isProcessing = true;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+
+      rafId = requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 50);
+
+        // Update active section based on scroll position
+        const sections = ['hero', 'about', 'clients', 'services'];
+        const scrollPosition = window.scrollY + 100;
+
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const { offsetTop, offsetHeight } = element;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(section);
+              break;
+            }
           }
         }
-      }
+
+        isProcessing = false;
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+    };
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -60,6 +80,7 @@ export default function Navigation() {
             <button
               onClick={() => scrollToSection('hero')}
               className="text-white font-bold text-xl tracking-wider hover:text-gold transition-colors"
+              aria-label="Go to home section"
             >
               KLINGEMAN CPAs
             </button>
@@ -82,17 +103,19 @@ export default function Navigation() {
             </div>
 
             {/* CTA Button */}
-            <button
-              onClick={() => window.location.href = 'mailto:Matt.Klingeman@klingemancpas.com'}
+            <a
+              href="mailto:Matt.Klingeman@klingemancpas.com"
               className="hidden md:block bg-gold text-navy-dark px-6 py-2.5 rounded-md font-semibold text-sm hover:bg-yellow hover:scale-105 transition-all duration-200"
             >
               Contact
-            </button>
+            </a>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden text-white hover:text-gold transition-colors"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -126,15 +149,15 @@ export default function Navigation() {
                   {link.label}
                 </motion.button>
               ))}
-              <motion.button
+              <motion.a
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: navLinks.length * 0.1 }}
-                onClick={() => window.location.href = 'mailto:Matt.Klingeman@klingemancpas.com'}
+                href="mailto:Matt.Klingeman@klingemancpas.com"
                 className="bg-gold text-navy-dark px-8 py-3 rounded-md font-semibold text-lg hover:bg-yellow transition-colors"
               >
                 Contact
-              </motion.button>
+              </motion.a>
             </div>
           </motion.div>
         )}
