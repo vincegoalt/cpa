@@ -80,15 +80,15 @@ export default function Navigation() {
             {/* Logo */}
             <button
               onClick={() => scrollToSection('hero')}
-              className="relative hover:opacity-80 transition-opacity py-2"
+              className="relative hover:opacity-80 transition-opacity py-1"
               aria-label="Go to home section"
             >
               <Image
                 src="/images/klingeman-logo.png"
                 alt="Klingeman CPAs Logo"
-                width={400}
-                height={133}
-                className="h-full max-h-16 w-auto brightness-0 invert"
+                width={450}
+                height={150}
+                className="h-full max-h-[72px] w-auto brightness-0 invert"
                 priority
               />
             </button>
