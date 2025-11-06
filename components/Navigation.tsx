@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -79,10 +80,17 @@ export default function Navigation() {
             {/* Logo */}
             <button
               onClick={() => scrollToSection('hero')}
-              className="text-white font-bold text-xl tracking-wider hover:text-gold transition-colors"
+              className="relative hover:opacity-80 transition-opacity"
               aria-label="Go to home section"
             >
-              KLINGEMAN CPAs
+              <Image
+                src="/images/klingeman-logo.png"
+                alt="Klingeman CPAs Logo"
+                width={180}
+                height={60}
+                className="h-12 w-auto"
+                priority
+              />
             </button>
 
             {/* Desktop Navigation */}
